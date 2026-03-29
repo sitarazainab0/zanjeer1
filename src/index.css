@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@font-face {
+  font-family: 'Jameel Noori Nastaleeq';
+  src: url('https://cdn.jsdelivr.net/gh/tariq-abdullah/urdu-web-font-CDN/JameelNooriNastaleeq.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --background: 150 20% 97%;
+    --foreground: 160 50% 5%;
+
+    --card: 150 20% 99%;
+    --card-foreground: 160 50% 5%;
+
+    --popover: 150 20% 99%;
+    --popover-foreground: 160 50% 5%;
+
+    --primary: 160 70% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 155 30% 93%;
+    --secondary-foreground: 160 50% 10%;
+
+    --muted: 150 15% 93%;
+    --muted-foreground: 150 10% 45%;
+
+    --accent: 168 75% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 150 20% 88%;
+    --input: 150 20% 88%;
+    --ring: 160 70% 38%;
+
+    --radius: 0.75rem;
+
+    --mesh-green: 160 70% 38%;
+    --mesh-teal: 168 75% 48%;
+    --mesh-blue: 172 65% 45%;
+    --mesh-bubble-sent: 160 40% 92%;
+    --mesh-bubble-received: 0 0% 100%;
+
+    --sidebar-background: 150 20% 96%;
+    --sidebar-foreground: 160 50% 10%;
+    --sidebar-primary: 160 70% 38%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 168 60% 92%;
+    --sidebar-accent-foreground: 160 50% 10%;
+    --sidebar-border: 150 20% 88%;
+    --sidebar-ring: 160 70% 38%;
+  }
+
+  .dark {
+    --background: 160 30% 6%;
+    --foreground: 150 20% 95%;
+
+    --card: 160 25% 9%;
+    --card-foreground: 150 20% 95%;
+
+    --popover: 160 25% 9%;
+    --popover-foreground: 150 20% 95%;
+
+    --primary: 160 65% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 160 25% 15%;
+    --secondary-foreground: 150 20% 90%;
+
+    --muted: 160 20% 15%;
+    --muted-foreground: 150 15% 55%;
+
+    --accent: 168 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 20% 18%;
+    --input: 160 20% 18%;
+    --ring: 160 65% 42%;
+
+    --mesh-green: 160 60% 40%;
+    --mesh-teal: 168 55% 45%;
+    --mesh-blue: 172 55% 42%;
+    --mesh-bubble-sent: 160 30% 18%;
+    --mesh-bubble-received: 160 25% 12%;
+
+    --sidebar-background: 160 30% 8%;
+    --sidebar-foreground: 150 20% 90%;
+    --sidebar-primary: 160 65% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 25% 15%;
+    --sidebar-accent-foreground: 150 20% 90%;
+    --sidebar-border: 160 20% 18%;
+    --sidebar-ring: 160 65% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply text-foreground;
+    font-family: 'Space Grotesk', sans-serif;
+    background-color: hsl(var(--muted));
+  }
+  .font-urdu {
+    font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif;
+    font-size: 1.15em;
+    line-height: 2.4;
+    letter-spacing: 0.01em;
+  }
+  /* Touch optimization */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Safe areas for notched phones */
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+@layer utilities {
+  .mesh-gradient {
+    background: linear-gradient(135deg, hsl(var(--mesh-green)), hsl(var(--mesh-teal)));
+  }
+  .mesh-gradient-text {
+    background: linear-gradient(135deg, hsl(var(--mesh-green)), hsl(var(--mesh-teal)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .bubble-sent {
+    background-color: hsl(var(--mesh-bubble-sent));
+  }
+  .bubble-received {
+    background-color: hsl(var(--mesh-bubble-received));
+  }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  .text-xl { font-size: 1.1rem; }
+  .px-4 { padding-left: 0.75rem; padding-right: 0.75rem; }
+}
+
+/* Landscape mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .mesh-gradient.px-4.py-3 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+}
