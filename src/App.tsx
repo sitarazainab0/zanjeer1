@@ -40,23 +40,30 @@ const App = () => (
               <Route path="/my-profile" element={<MyProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-            {/* ڈاؤن لوڈ بٹن یہاں سے شروع ہو رہا ہے */}
-        <div style={{ textAlign: 'center', margin: '20px 0', position: 'relative', zIndex: 1000 }}>
-          <p style={{ color: '#666', fontSize: '14px', marginBottom: '8px' }}>
-            زنجیر ایپ یہاں سے ڈاؤن لوڈ کریں:
-          </p>
-          <a href="https://github.com/sitarazainab0/zanjeer1/releases/download/v1.0/ZANJEER.apk" 
+            {/* یہ بٹن اب اسکرین کے بالکل اوپر جم جائے گا اور لنک بھی پکا ہوگا */}
+        <div style={{ 
+            position: 'fixed', 
+            top: '0', 
+            left: '0', 
+            width: '100%', 
+            zIndex: 9999, 
+            textAlign: 'center',
+            padding: '10px 0',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderBottom: '1px solid #ddd'
+        }}>
+          <a href="https://github.com/sitarazainab0/zanjeer1/releases/download/v1.0/zanjeer1.apk" 
              style={{ 
                backgroundColor: '#27ae60', 
                color: 'white', 
-               padding: '10px 20px', 
-               borderRadius: '50px', 
+               padding: '12px 25px', 
+               borderRadius: '30px', 
                textDecoration: 'none', 
                fontWeight: 'bold',
                display: 'inline-block',
-               boxShadow: '0 2px 8px rgba(0,0,0,0.2)' 
+               boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
              }}>
-            Download ZANJEER APK
+            📥 Download ZANJEER App
           </a>
         </div>
           </BrowserRouter>
