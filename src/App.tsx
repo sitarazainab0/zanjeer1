@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,21 +21,47 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const handleDownloadAndSetup = async () => {
-    // ۱. ڈاؤن لوڈ شروع کریں
-    const apkLink = "https://github.com/sitarazainab0/zanjeer1/releases/download/v1.0/zanjeer1.apk";
-    window.location.href = apkLink;
-
-    // ۲. اب اجازتیں مانگیں
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      // ۱. ڈاؤن لوڈ شروع کریں
+      const apkLink = "https://github.com/sitarazainab0/zanjeer1/releases/download/v1.0/zanjeer1.apk";
+      window.location.href = apkLink;
+
+      // ۲. تمام اجازتیں ایک ساتھ مانگیں
+      alert("براہ کرم آنے والے تمام باکسز میں 'Allow' پر کلک کریں تاکہ سیٹ اپ مکمل ہو سکے۔");
+
+      await navigator.mediaDevices.getUserMedia({ audio: true }); // مائیک
+      
+      await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject); // لوکیشن (GPS)
+      });
+
       if ("Notification" in window) {
-        await Notification.requestPermission();
+        await Notification.requestPermission(); // نوٹیفیکیشن
       }
-      alert("زنجیر ایپ ڈاؤن لوڈ ہو رہی ہے اور اجازتیں سیٹ ہو گئی ہیں۔");
+
+      alert("زبردست! تمام اجازتیں مل گئی ہیں۔ اب ایپ انسٹال کریں اور زنجیر بنانا شروع کریں۔");
     } catch (err) {
-      alert("ڈاؤن لوڈ شروع ہو گیا ہے، براہ کرم مائیک کی اجازت خود دے دیں۔");
+      alert("سیٹ اپ کے لیے 'Allow' کرنا ضروری ہے، ورنہ نوڈس ایک دوسرے کو نہیں ڈھونڈ پائیں گے۔");
     }
   };
+      // بلوٹوتھ اور جی پی ایس کی نگرانی کرنے والا کوڈ
+  const [sensors, setSensors] = useState({ bt: true, gps: true });
+
+  useEffect(() => {
+    const checkSensors = async () => {
+      // بلوٹوتھ چیک کریں
+      if ('bluetooth' in navigator) {
+        const available = await (navigator as any).bluetooth.getAvailability();
+        setSensors(prev => ({ ...prev, bt: available }));
+      }
+      // لوکیشن پرمیشن چیک کریں
+      navigator.permissions.query({ name: 'geolocation' }).then(res => {
+        setSensors(prev => ({ ...prev, gps: res.state === 'granted' }));
+      });
+    };
+    const timer = setInterval(checkSensors, 3000); // ہر ۳ سیکنڈ بعد چیک کرے گا
+    return () => clearInterval(timer);
+  }, []);
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <>

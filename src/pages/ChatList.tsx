@@ -11,6 +11,22 @@ import logo from "@/assets/zanjeer-logo-generated.png";
 import { getUserProfile } from "./Onboarding";
 import { getSavedContacts } from "./AddContact";
 
+const MessageStatus = ({ status }: { status: 'sent' | 'delivered' | 'read' }) => {
+  // رنگوں کا فیصلہ: ریڈ (نیلا) ورنہ سرمئی
+  const color = status === 'read' ? '#34B7F1' : '#888';
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', marginLeft: '5px' }}>
+      {status === 'sent' ? (
+        <span style={{ color: color, fontSize: '12px' }}>✓</span> /* ایک ٹک */
+      ) : ( 
+        <span style={{ color: color, fontSize: '12px', letterSpacing: '-3px', fontWeight: 'bold' }}>
+          ✓✓ {/* دو ٹک */}
+        </span>
+      )}
+    </div>
+  );
+};
 const ChatList = () => {
   const navigate = useNavigate();
   const { t, language, setLanguage, isDark, toggleTheme } = useApp();
@@ -26,7 +42,8 @@ const ChatList = () => {
   });
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-
+// وائس ریکارڈنگ کا وقت نوٹ کرنے کے لیے
+  const voiceStartTime = useRef<number>(0);
   // Close menu on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -52,6 +69,7 @@ const ChatList = () => {
     lastTime: new Date(c.addedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     online: true,
     hopCount: 1,
+    lastMessageStatus: "sent",
   }));
 
   const allPeers = [...savedAsPeers, ...peers];
@@ -372,7 +390,7 @@ const ChatList = () => {
                       : t(`Relay ×${peer.hopCount}`, `ریلے ×${peer.hopCount}`)}
                   </span>
                   <span className="text-xs text-muted-foreground truncate">
-                    {language === "ur" ? peer.lastMessageUr : peer.lastMessage}
+                    {language === "ur" ? peer.lastMessageUr : peer.lastMessage}<MessageStatus status={(peer as any).lastMessageStatus || 'sent'} />
                   </span>
                 </div>
                 {unreadCounts[peer.id] && !isSelecting && (
