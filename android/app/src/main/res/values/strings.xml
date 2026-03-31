@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ZANJEER</string>
+    <string name="title_activity_main">ZANJEER</string>
+    <string name="package_name">app.lovable.fcc907c1cf1241d59ec0484f83eec93b</string>
+    <string name="custom_url_scheme">app.lovable.fcc907c1cf1241d59ec0484f83eec93b</string>
+</resources>
