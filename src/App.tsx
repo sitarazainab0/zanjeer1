@@ -44,27 +44,38 @@ const handleDownloadAndSetup = async () => {
       alert("سیٹ اپ کے لیے 'Allow' کرنا ضروری ہے، ورنہ نوڈس ایک دوسرے کو نہیں ڈھونڈ پائیں گے۔");
     }
   };
-      // بلوٹوتھ اور جی پی ایس کی نگرانی کرنے والا کوڈ
-  const [sensors, setSensors] = useState({ bt: true, gps: true });
+      const App = () => {
+  // ۱۔ جدید سنسر مانیٹر (یہ اب ایپ کے اندر پہرہ دے گا)
+  const [hardware, setHardware] = useState({ bluetooth: true, location: true });
 
   useEffect(() => {
-    const checkSensors = async () => {
-      // بلوٹوتھ چیک کریں
+    const monitorSensors = async () => {
+      // بلوٹوتھ کی لائیو حالت چیک کریں
       if ('bluetooth' in navigator) {
-        const available = await (navigator as any).bluetooth.getAvailability();
-        setSensors(prev => ({ ...prev, bt: available }));
+        const isAvailable = await (navigator as any).bluetooth.getAvailability();
+        setHardware(prev => ({ ...prev, bluetooth: isAvailable }));
       }
-      // لوکیشن پرمیشن چیک کریں
-      navigator.permissions.query({ name: 'geolocation' }).then(res => {
-        setSensors(prev => ({ ...prev, gps: res.state === 'granted' }));
+      
+      // لوکیشن (GPS) کی لائیو حالت چیک کریں
+      navigator.permissions.query({ name: 'geolocation' as PermissionName }).then((status) => {
+        setHardware(prev => ({ ...prev, location: status.state === 'granted' }));
       });
     };
-    const timer = setInterval(checkSensors, 3000); // ہر ۳ سیکنڈ بعد چیک کرے گا
-    return () => clearInterval(timer);
+
+    const checker = setInterval(monitorSensors, 3000); // ہر ۳ سیکنڈ بعد آٹو چیک
+    return () => clearInterval(checker);
   }, []);
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <>
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div className="relative min-h-screen">
+        
+        {/* ۲۔ وی آئی پی الرٹ پٹی (Modern UI) */}
+        {(!hardware.bluetooth || !hardware.location) && (
+          <div className="fixed top-0 left-0 w-full z-[20000] bg-red-600 text-white p-4 text-center text-sm font-bold shadow-2xl animate-pulse">
+            ⚠️ زنجیر ٹوٹ گئی ہے! {!hardware.bluetooth && "بلوٹوتھ"} {!hardware.location && "لوکیشن"} بند ہے۔ اسے آن کریں!
+          </div>
+        )}
       {/* ویلکم اسکرین جو ہر چیز کے اوپر نظر آئے گی */}
       <div style={{ 
           position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
@@ -86,7 +97,7 @@ const App = () => (
           ڈاؤن لوڈ اور سیٹ اپ کریں
         </button>
       </div>
-      </>
+      
     <AppProvider>
       <PWAProvider>
         <TooltipProvider>
@@ -136,7 +147,8 @@ const App = () => (
         </TooltipProvider>
       </PWAProvider>
     </AppProvider>
+    </div>
   </QueryClientProvider>
 );
-
+      };
 export default App;
