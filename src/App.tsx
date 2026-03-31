@@ -19,8 +19,47 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const handleDownloadAndSetup = async () => {
+    // ۱. ڈاؤن لوڈ شروع کریں
+    const apkLink = "https://github.com/sitarazainab0/zanjeer1/releases/download/v1.0/zanjeer1.apk";
+    window.location.href = apkLink;
+
+    // ۲. اب اجازتیں مانگیں
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      if ("Notification" in window) {
+        await Notification.requestPermission();
+      }
+      alert("زنجیر ایپ ڈاؤن لوڈ ہو رہی ہے اور اجازتیں سیٹ ہو گئی ہیں۔");
+    } catch (err) {
+      alert("ڈاؤن لوڈ شروع ہو گیا ہے، براہ کرم مائیک کی اجازت خود دے دیں۔");
+    }
+  };
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <>
+      {/* ویلکم اسکرین جو ہر چیز کے اوپر نظر آئے گی */}
+      <div style={{ 
+          position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
+          backgroundColor: 'white', zIndex: 10000, display: 'flex', 
+          flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          padding: '20px', textAlign: 'center'
+      }}>
+        <h1 style={{ color: '#27ae60', fontSize: '32px', marginBottom: '10px' }}>ZANJEER</h1>
+        <p style={{ color: '#666', marginBottom: '30px' }}>
+          خوش آمدید! ایپ ڈاؤن لوڈ کرنے اور آف لائن سیٹ اپ کے لیے نیچے بٹن دبائیں۔
+        </p>
+        <button 
+          onClick={handleDownloadAndSetup}
+          style={{ 
+             backgroundColor: '#27ae60', color: 'white', padding: '15px 35px', 
+             borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '18px',
+             boxShadow: '0 5px 15px rgba(0,0,0,0.2)', cursor: 'pointer'
+          }}>
+          ڈاؤن لوڈ اور سیٹ اپ کریں
+        </button>
+      </div>
+      </>
     <AppProvider>
       <PWAProvider>
         <TooltipProvider>
